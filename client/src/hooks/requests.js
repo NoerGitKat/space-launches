@@ -1,6 +1,9 @@
 async function httpGetPlanets() {
-    // TODO: Once API is ready.
-    // Load planets and return as JSON.
+    const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/planets`,
+    );
+
+    return response.json();
 }
 
 async function httpGetLaunches() {
