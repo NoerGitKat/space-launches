@@ -49,3 +49,14 @@ export interface IPlanet {
     dec: string;
     koi_kepmag: string;
 }
+
+export interface ILaunch {
+    flightNumber: number;
+    mission: string;
+    rocket: string;
+    launchDate: Date;
+    destination: string;
+    customer: string[];
+    upcoming: boolean;
+    success: boolean;
+}

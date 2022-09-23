@@ -39,4 +39,8 @@ function loadPlanetsData() {
     });
 }
 
-export default { planets, loadPlanetsData };
+function getAllPlanets() {
+    return planets;
+}
+
+export default { loadPlanetsData, getAllPlanets };
