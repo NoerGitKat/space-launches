@@ -9,7 +9,7 @@ export function httpGetAllLaunches(_req: Request, res: Response) {
 export function httpAddNewLaunch(req: Request, res: Response) {
     const { mission, rocket, launchDate, destination }: INewLaunchBody =
         req.body;
-    console.log("typeof date", typeof launchDate);
+
     if (!mission || !rocket || !launchDate || !destination) {
         return res.status(400).json({ error: "Fill out all the details!" });
     }
@@ -19,4 +19,14 @@ export function httpAddNewLaunch(req: Request, res: Response) {
     }
     const newLaunch = { mission, rocket, launchDate, destination };
     return res.status(201).json(launchesModel.addNewLaunch(newLaunch));
+}
+
+export function httpAbortLaunch(req: Request, res: Response) {
+    const id = Number(req.params.id);
+
+    if (!launchesModel.checkLaunchExists(id)) {
+        return res.status(404).json({ error: "Launch not found!" });
+    }
+
+    return res.status(204).json(launchesModel.abortLaunchById(id));
 }

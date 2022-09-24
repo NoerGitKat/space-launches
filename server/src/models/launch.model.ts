@@ -34,4 +34,22 @@ function addNewLaunch(launch: ILaunch) {
     );
 }
 
-export default { getAllLaunches, addNewLaunch };
+function checkLaunchExists(id: number) {
+    return launches.has(id);
+}
+
+function abortLaunchById(id: number) {
+    const abortedLaunch = launches.get(id);
+    if (abortedLaunch) {
+        abortedLaunch.upcoming = false;
+        abortedLaunch.success = false;
+        return abortedLaunch;
+    }
+}
+
+export default {
+    getAllLaunches,
+    addNewLaunch,
+    abortLaunchById,
+    checkLaunchExists,
+};
