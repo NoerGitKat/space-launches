@@ -1,22 +1,46 @@
 async function httpGetPlanets() {
-    const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/planets`,
-    );
+    try {
+        const response = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/planets`,
+        );
 
-    return response.json();
+        return response.json();
+    } catch (err) {
+        return { ok: false };
+    }
 }
 
 async function httpGetLaunches() {
-    const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/launches`,
-    );
+    try {
+        const response = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/launches`,
+        );
 
-    return response.json();
+        return response.json();
+    } catch (err) {
+        return { ok: false };
+    }
 }
 
 async function httpSubmitLaunch(launch) {
-    // TODO: Once API is ready.
-    // Submit given launch data to launch system.
+    const opts = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(launch),
+    };
+
+    try {
+        const response = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/launches`,
+            opts,
+        );
+
+        return response;
+    } catch (err) {
+        return { ok: false };
+    }
 }
 
 async function httpAbortLaunch(id) {

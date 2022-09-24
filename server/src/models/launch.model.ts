@@ -2,6 +2,8 @@ import { ILaunch } from "../../interfaces";
 
 const launches: Map<number, ILaunch> = new Map();
 
+let latestFlightNumber = 100;
+
 const launch: ILaunch = {
     flightNumber: 100,
     mission: "Kepler Exploration",
@@ -13,10 +15,23 @@ const launch: ILaunch = {
     success: true,
 };
 
-launches.set(launch.flightNumber, launch);
+launches.set(latestFlightNumber, launch);
 
 function getAllLaunches() {
     return Array.from(launches.values());
 }
 
-export default { getAllLaunches };
+function addNewLaunch(launch: ILaunch) {
+    latestFlightNumber++;
+    launches.set(
+        latestFlightNumber,
+        Object.assign(launch, {
+            success: true,
+            upcoming: true,
+            customers: ["Noer", "Mapi"],
+            flightNumber: latestFlightNumber,
+        }),
+    );
+}
+
+export default { getAllLaunches, addNewLaunch };

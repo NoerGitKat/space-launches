@@ -51,12 +51,19 @@ export interface IPlanet {
 }
 
 export interface ILaunch {
-    flightNumber: number;
+    flightNumber?: number;
     mission: string;
     rocket: string;
     launchDate: Date;
     destination: string;
-    customer: string[];
-    upcoming: boolean;
-    success: boolean;
+    customer?: string[];
+    upcoming?: boolean;
+    success?: boolean;
+}
+
+export interface INewLaunchBody {
+    mission: string;
+    rocket: string;
+    launchDate: Date;
+    destination: string;
 }
