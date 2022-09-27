@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { join } from "path";
-import planetsModel from "../../models/planets.model";
+import planetsModel from "../../models/planet.model";
 
 export function httpGetAllPlanets(req: Request, res: Response) {
     return res.status(200).json(planetsModel.getAllPlanets());
