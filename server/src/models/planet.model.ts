@@ -2,8 +2,7 @@ import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import { join } from "path";
 import { IPlanet } from "../../interfaces";
-
-const planets: IPlanet[] = [];
+import planetDB from "./planet.schema";
 
 function isHabitablePlanet(planet: IPlanet) {
     return (
@@ -23,24 +22,46 @@ function loadPlanetsData() {
                     columns: true,
                 }),
             )
-            .on("data", (data) => {
+            .on("data", async function createNewPlanet(data: IPlanet) {
                 if (isHabitablePlanet(data)) {
-                    planets.push(data);
+                    await savePlanet(data);
                 }
             })
             .on("error", (err) => {
                 console.log(err);
                 reject();
             })
-            .on("end", () => {
-                console.log(`${planets.length} habitable planets found!`);
+            .on("end", async function finishLoad() {
+                const allPlanets = await getAllPlanets();
+                console.log(`${allPlanets.length} habitable planets found!`);
                 resolve();
             });
     });
 }
 
-function getAllPlanets() {
-    return planets;
+async function getAllPlanets() {
+    try {
+        const allPlanets: IPlanet[] = await planetDB.find({});
+        return allPlanets;
+    } catch (err) {
+        console.error(`Could not get planets ${err}`);
+        return [];
+    }
+}
+
+async function savePlanet(planet: IPlanet) {
+    const newData = {
+        kepler_name: planet.kepler_name,
+    };
+    try {
+        const updatedPlanet = await planetDB.updateOne(newData, newData, {
+            upsert: true,
+        });
+        return updatedPlanet;
+    } catch (err) {
+        console.error(`Could not save planet ${err}`);
+        return err;
+    }
 }
 
 export default { loadPlanetsData, getAllPlanets };

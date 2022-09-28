@@ -33,6 +33,6 @@ const launchSchema: Schema<ILaunch> = new Schema({
     },
 });
 
-const launchModel = model("Launch", launchSchema);
+const launchDB = model("Launch", launchSchema);
 
-export default launchModel;
+export default launchDB;

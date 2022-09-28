@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { join } from "path";
-import planetsModel from "../../models/planet.model";
+import planets from "../../models/planet.model";
 
-export function httpGetAllPlanets(req: Request, res: Response) {
-    return res.status(200).json(planetsModel.getAllPlanets());
+export async function httpGetAllPlanets(req: Request, res: Response) {
+    return res.status(200).json(await planets.getAllPlanets());
 }
 
 export function getIndexPage(_req: Request, res: Response) {

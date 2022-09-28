@@ -8,6 +8,6 @@ const planetSchema: Schema<IPlanet> = new Schema({
     },
 });
 
-const planetModel = model("Planet", planetSchema);
+const planetDB = model("Planet", planetSchema);
 
-export default planetModel;
+export default planetDB;

@@ -1,8 +1,8 @@
 import { ILaunch } from "../../interfaces";
+import launchDB from "./launch.schema";
+import planetDB from "./planet.schema";
 
-const launches: Map<number, ILaunch> = new Map();
-
-let latestFlightNumber = 100;
+const latestFlightNumber = 100;
 
 const launch: ILaunch = {
     flightNumber: 100,
@@ -15,41 +15,100 @@ const launch: ILaunch = {
     success: true,
 };
 
-launches.set(latestFlightNumber, launch);
+saveLaunch(launch);
 
-function getAllLaunches() {
-    return Array.from(launches.values());
+async function getAllLaunches() {
+    const projectionExpression = { _id: 0, __v: 0 };
+    const allLaunches = await launchDB.find({}, projectionExpression);
+    return allLaunches;
 }
 
-function addNewLaunch(launch: ILaunch) {
-    latestFlightNumber++;
-    launches.set(
-        latestFlightNumber,
-        Object.assign(launch, {
-            success: true,
-            upcoming: true,
-            customers: ["Noer", "Mapi"],
-            flightNumber: latestFlightNumber,
-        }),
-    );
-}
+async function saveLaunch(launch: ILaunch) {
+    const planet = await planetDB.findOne({
+        kepler_name: launch.destination,
+    });
 
-function checkLaunchExists(id: number) {
-    return launches.has(id);
-}
-
-function abortLaunchById(id: number) {
-    const abortedLaunch = launches.get(id);
-    if (abortedLaunch) {
-        abortedLaunch.upcoming = false;
-        abortedLaunch.success = false;
-        return abortedLaunch;
+    if (!planet) {
+        throw new Error("No matching planet found!");
     }
+
+    try {
+        await launchDB.updateOne(
+            {
+                flightNumber: launch.flightNumber,
+            },
+            launch,
+            { upsert: true },
+        );
+    } catch (err) {
+        console.error(err);
+        return { ok: false };
+    }
+}
+
+async function getLatestFlightNumber() {
+    try {
+        const latestLaunch = await launchDB.findOne().sort("-flightNumber");
+
+        if (!latestLaunch) {
+            return latestFlightNumber;
+        }
+        return latestLaunch.flightNumber;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function scheduleNewLaunch(
+    launch: ILaunch,
+): Promise<ILaunch | { ok: boolean }> {
+    let newFlightNumber;
+    try {
+        newFlightNumber = await getLatestFlightNumber();
+    } catch (err) {
+        console.error(err);
+        return { ok: false };
+    }
+
+    if (!newFlightNumber) {
+        newFlightNumber = latestFlightNumber;
+    }
+    const newLaunch = Object.assign(launch, {
+        success: true,
+        upcoming: true,
+        customers: ["Noer", "Mapi"],
+        flightNumber: ++newFlightNumber,
+    });
+
+    try {
+        await saveLaunch(newLaunch);
+    } catch (err) {
+        console.error(err);
+        return { ok: false };
+    }
+
+    return newLaunch;
+}
+
+async function checkLaunchExists(id: number) {
+    const launch = await launchDB.exists({ flightNumber: id });
+
+    return launch;
+}
+
+async function abortLaunch(id: number) {
+    await launchDB.findOneAndUpdate(
+        { flightNumber: id },
+        {
+            success: false,
+            upcoming: false,
+        },
+    );
 }
 
 export default {
     getAllLaunches,
-    addNewLaunch,
-    abortLaunchById,
+    scheduleNewLaunch,
+    abortLaunch,
     checkLaunchExists,
 };
