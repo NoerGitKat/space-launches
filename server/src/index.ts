@@ -1,7 +1,8 @@
 import * as dotenv from "dotenv";
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
 import app from "./app";
-import planetDB from "./models/planet.model";
+import launches from "./models/launch.model";
+import planets from "./models/planet.model";
 import mongo from "./services/mongo";
 
 dotenv.config();
@@ -14,7 +15,9 @@ const server: Server<typeof IncomingMessage, typeof ServerResponse> =
 async function startServer() {
     try {
         await mongo.connectToDB();
-        await planetDB.loadPlanetsData();
+        await planets.loadPlanetsData();
+        await launches.loadLaunchesData();
+
         server.listen(PORT, function listenToPort() {
             console.log(`Listening on port ${PORT}!`);
         });

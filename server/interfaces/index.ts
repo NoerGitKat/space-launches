@@ -54,9 +54,20 @@ export interface ILaunch {
     flightNumber?: number;
     mission: string;
     rocket: string;
-    launchDate: Date;
-    destination: string;
-    customer?: string[];
+    launchDate: Date | string;
+    destination?: string;
+    customers?: string[];
+    upcoming?: boolean;
+    success?: boolean;
+}
+
+export interface ILaunchFilter {
+    flightNumber?: number;
+    mission?: string;
+    rocket?: string;
+    launchDate?: Date | string;
+    destination?: string;
+    customers?: string[];
     upcoming?: boolean;
     success?: boolean;
 }
@@ -66,4 +77,27 @@ export interface INewLaunchBody {
     rocket: string;
     launchDate: Date;
     destination: string;
+}
+
+export interface ISpaceXLaunchRequest {
+    query: object;
+    options: {
+        pagination: boolean;
+        populate: (
+            | {
+                  path: string;
+                  select: {
+                      name: number;
+                      customers?: undefined;
+                  };
+              }
+            | {
+                  path: string;
+                  select: {
+                      customers: number;
+                      name?: undefined;
+                  };
+              }
+        )[];
+    };
 }

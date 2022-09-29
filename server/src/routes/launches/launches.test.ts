@@ -17,7 +17,7 @@ describe("Launch API", function launchTestAPI() {
     describe("GET all launches", function testAllLaunches() {
         test("It should return an array of launches", async function returnAllLaunches() {
             const response = await request(app)
-                .get("/launches")
+                .get("/v1/launches")
                 .expect("Content-Type", /json/)
                 .expect(200);
         });
@@ -26,7 +26,7 @@ describe("Launch API", function launchTestAPI() {
     describe("POST new launch", function testAllLaunches() {
         test("It should successfully create a new launch", async function createNewLaunch() {
             const response = await request(app)
-                .post("/launches")
+                .post("/v1/launches")
                 .send({
                     mission: "Whats up",
                     rocket: "some raquet",
@@ -39,7 +39,7 @@ describe("Launch API", function launchTestAPI() {
 
         test("It should catch missing required properties", async function catchMissingProperties() {
             const response = await request(app)
-                .post("/launches")
+                .post("/v1/launches")
                 .send({
                     mission: "USS Enterprise",
                     rocket: "NCC 1701-D",
