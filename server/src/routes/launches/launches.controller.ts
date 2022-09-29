@@ -1,9 +1,32 @@
 import { Request, Response } from "express";
-import { INewLaunchBody } from "../../../interfaces";
+import { ILaunch, INewLaunchBody } from "../../../interfaces";
 import launches from "../../models/launch.model";
+import query from "../../services/query";
 
-export async function httpGetAllLaunches(_req: Request, res: Response) {
-    return res.status(200).json(await launches.getAllLaunches());
+interface IQueryString {
+    page: string | number;
+    limit: string | number;
+}
+
+export async function httpGetAllLaunches(
+    req: Request<null, null, null, IQueryString>,
+    res: Response,
+) {
+    const { page, limit } = req.query;
+    let allLaunches: ILaunch[] = [];
+    console.log("page and limit", page, limit);
+
+    const { skippedPerPage, limitNumber } = query.getPagination({
+        page,
+        limit,
+    });
+
+    console.log("skipp", skippedPerPage);
+    console.log("limit", limitNumber);
+
+    allLaunches = await launches.getAllLaunches(skippedPerPage, limitNumber);
+
+    return res.status(200).json(allLaunches);
 }
 
 export async function httpAddNewLaunch(req: Request, res: Response) {

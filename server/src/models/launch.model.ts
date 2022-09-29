@@ -92,9 +92,12 @@ async function loadLaunchesData() {
     }
 }
 
-async function getAllLaunches() {
+async function getAllLaunches(skippedPerPage: number, limitNumber: number) {
     const projectionExpression = { _id: 0, __v: 0 };
-    const allLaunches = await launchDB.find({}, projectionExpression);
+    const allLaunches = await launchDB
+        .find({}, projectionExpression)
+        .skip(skippedPerPage)
+        .limit(limitNumber);
     return allLaunches;
 }
 
