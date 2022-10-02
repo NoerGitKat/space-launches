@@ -13,7 +13,7 @@ function isHabitablePlanet(planet: IPlanet) {
     );
 }
 
-function loadPlanetsData() {
+async function loadPlanetsData() {
     return new Promise<void>((resolve, reject) => {
         createReadStream(join(__dirname, "../../data", "kepler_data.csv"))
             .pipe(

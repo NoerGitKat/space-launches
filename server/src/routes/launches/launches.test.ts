@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import request from "supertest";
 import app from "../../app";
+import planets from "../../models/planet.model";
 import mongo from "../../services/mongo";
 
 dotenv.config();
@@ -8,6 +9,7 @@ dotenv.config();
 describe("Launch API", function launchTestAPI() {
     beforeAll(async function setupAPI() {
         await mongo.connectToDB();
+        planets.loadPlanetsData();
     });
 
     afterAll(async function unmountAPI() {
