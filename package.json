@@ -6,7 +6,9 @@
     "author": "Noer Paanakker <noer@lightworksweb.nl>",
     "license": "MIT",
     "scripts": {
-        "install": "concurrently \"cd client && yarn \" \"cd server && yarn\"",
+        "install": "yarn install-client && yarn install-server",
+        "install-client": "cd client && yarn",
+        "install-server": "cd server && yarn",
         "dev": "concurrently \" cd client && yarn start\" \" cd server && yarn dev \"",
         "format": "prettier . --write",
         "lint": "eslint . --fix",
