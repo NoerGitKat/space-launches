@@ -10,6 +10,7 @@
         "dev": "concurrently \" cd client && yarn start\" \" cd server && yarn dev \"",
         "format": "prettier . --write",
         "lint": "eslint . --fix",
+        "test": "concurrently \" cd client && yarn test \" \" cd server && yarn test \"",
         "build": "concurrently \" cd client && yarn build \" \" cd server && yarn build \""
     },
     "devDependencies": {
