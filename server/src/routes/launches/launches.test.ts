@@ -9,7 +9,7 @@ dotenv.config();
 describe("Launch API", function launchTestAPI() {
     beforeAll(async function setupAPI() {
         await mongo.connectToDB();
-        planets.loadPlanetsData();
+        await planets.loadPlanetsData();
     });
 
     afterAll(async function unmountAPI() {
