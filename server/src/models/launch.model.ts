@@ -144,7 +144,7 @@ async function scheduleNewLaunch(
 
         newFlightNumber = await getLatestFlightNumber();
     } catch (err) {
-        console.error(err);
+        console.log(err);
         return { ok: false };
     }
 

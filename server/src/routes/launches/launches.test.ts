@@ -8,6 +8,7 @@ dotenv.config();
 
 describe("Launch API", function launchTestAPI() {
     beforeAll(async function setupAPI() {
+        await mongo.disconnectDB();
         await mongo.connectToDB();
         await planets.loadPlanetsData();
     });
@@ -32,7 +33,7 @@ describe("Launch API", function launchTestAPI() {
                 .send({
                     mission: "Whats up",
                     rocket: "some raquet",
-                    destination: "Kepler-62 f",
+                    destination: "Kepler-452 b",
                     launchDate: "November 28, 2025",
                 })
                 .expect("Content-Type", /json/)
@@ -45,7 +46,7 @@ describe("Launch API", function launchTestAPI() {
                 .send({
                     mission: "USS Enterprise",
                     rocket: "NCC 1701-D",
-                    destination: "Kepler-186 f",
+                    destination: "Kepler-452 b",
                     launchDate: new Date("December 27, 2030"),
                 });
         });

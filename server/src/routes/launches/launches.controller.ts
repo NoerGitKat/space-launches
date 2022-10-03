@@ -14,15 +14,11 @@ export async function httpGetAllLaunches(
 ) {
     const { page, limit } = req.query;
     let allLaunches: ILaunch[] = [];
-    console.log("page and limit", page, limit);
 
     const { skippedPerPage, limitNumber } = query.getPagination({
         page,
         limit,
     });
-
-    console.log("skipp", skippedPerPage);
-    console.log("limit", limitNumber);
 
     allLaunches = await launches.getAllLaunches(skippedPerPage, limitNumber);
 
